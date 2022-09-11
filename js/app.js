@@ -13,7 +13,7 @@ loadProducts("https://fakestoreapi.com/products");
 
 // show all product in UI
 const showProducts = (products) => {
-    setInnerText("total_products", products.length);
+  setInnerText("total_products", products.length);
   //   setInnerText("total_products", products.length / 2);
 
   document.getElementById("all-products").innerHTML = "";
@@ -97,17 +97,17 @@ const setInnerText = (id, value) => {
 // update delivery charge and total Tax
 const updateTaxAndCharge = () => {
   const priceConverted = getInputValue("price");
-  if (priceConverted > 200) {
-    setInnerText("delivery-charge", 30);
-    setInnerText("total-tax", priceConverted * 0.2);
-  }
-  if (priceConverted > 400) {
-    setInnerText("delivery-charge", 50);
-    setInnerText("total-tax", priceConverted * 0.3);
-  }
   if (priceConverted > 500) {
     setInnerText("delivery-charge", 60);
     setInnerText("total-tax", priceConverted * 0.4);
+  } else if (priceConverted > 400) {
+    setInnerText("delivery-charge", 50);
+    setInnerText("total-tax", priceConverted * 0.3);
+  } else if (priceConverted > 200) {
+    setInnerText("delivery-charge", 30);
+    setInnerText("total-tax", priceConverted * 0.2);
+  } else {
+    setInnerText("delivery-charge", 20);
   }
 };
 
@@ -118,14 +118,16 @@ const updateTotal = () => {
     getInputValue("delivery-charge") +
     getInputValue("total-tax");
   //   console.log(grandTotal);
-  document.getElementById("total").innerText = grandTotal;
+  document.getElementById("total").innerText = grandTotal.toFixed(2);
 };
 
 // search by category
 document.getElementById("search-btn").addEventListener("click", function () {
   const inputField = document.getElementById("input-value").value;
-  const searchedProduct = arr[0].find((p) =>
-    p.category.startsWith(`${inputField}`)
+  const searchedProduct = arr[0].filter(
+    (p) =>
+      p.category.toLowerCase().includes(inputField.toLowerCase()) ||
+      p.title.toLowerCase().includes(inputField.toLowerCase())
   );
   showProducts(searchedProduct);
 });
